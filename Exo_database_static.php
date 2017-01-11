@@ -7,9 +7,14 @@ require_once('Database.php'); //PHP vérifie si le fichier a déjà été inclus
 $db = Database::connect(); //je me connect a la base de données
 
 $sql = "SELECT * FROM articles"; //j'initialise ma commande SQL
-$articles = $db->exec($sql); //jexecute ma commande SQL avec exec de db 
-var_dump($db);
-var_dump($articles);
+$articles = $db->query($sql); //jexecute ma commande SQL avec exec de db 
+//var_dump($articles->fetch());
+/*while ($donnees = $articles->fetch())
+{
+    var_dump($donnees);
+}*/
+//var_dump($donnees);
+//var_dump($articles);
 
 Database::disconnect($db); //je deconnecte ma base de donnée
 
