@@ -1,21 +1,14 @@
 <?php 
 
-/* Ecrit une classe Database dans un fichier Database.php qui permet ces usages */
+require_once('ArticleRepository.php');
+require_once('Article.php');
 
-require_once('Database.php'); //PHP vérifie si le fichier a déjà été inclus, et si c'est le cas, ne l'inclut pas une deuxième fois
+$newArticle = new Article();
+$newArticle->setId(4)->setTitle('nouveau')->setContent('NOUVEAU')->setDateToNow();
+ArticleRepository::updateArticle($newArticle);
 
-$db = Database::connect(); //je me connect a la base de données
 
-$sql = "SELECT * FROM articles"; //j'initialise ma commande SQL
-$articles = $db->query($sql); //jexecute ma commande SQL avec exec de db 
-//var_dump($articles->fetch());
-/*while ($donnees = $articles->fetch())
-{
-    var_dump($donnees);
-}*/
-//var_dump($donnees);
-//var_dump($articles);
-
-Database::disconnect($db); //je deconnecte ma base de donnée
+$a = ArticleRepository::getArticleById(4);
+var_dump($a);
 
  ?>

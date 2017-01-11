@@ -1,36 +1,19 @@
 <?php 
 
 require_once('Database.php');
-/**
-* 
-*/
+require_once('Article.php');
+
 class ArticleRepository
 {
-	
-
-/*
-$articles = ArticleRepository::getAllArticle();
-$article = ArticleRepository::getArticleById(42);
-$article = ArticleRepository::get10MostRecentArticle();
-ArticleRepository::removeArticleById();
-ArticleRepository::updateArticle($newArticle);
-*/
-
 	public static function getAllArticle()
 	{
 		$db = Database::connect();
 		$sql = "SELECT * FROM articles"; //j'initialise ma commande SQL
-		$articles = $db->query($sql); //articles = l'execution de la requete sql
-		$db = Database::disconnect();
-		$stack = array(); 
+		$data = $db->query($sql); //articles = l'execution de la requete sql
+		Database::disconnect();
+		$articles = $data->fetchAll(PDO::FETCH_CLASS, "Article");
 
-		while ($donnees = $articles->fetch())
-		{
-		    //array_push($stack, $donnees);//permet de rajouter des elements a la suite d'un tableau
-		    $stack[] = $donnees;
-		}
-		//var_dump($stack);
-		return $stack;
+		return $articles;
 	}
 
 	public static function getArticleById($idArticle)
@@ -38,11 +21,13 @@ ArticleRepository::updateArticle($newArticle);
 		//modifier requete sql
 		$db = Database::connect();
 		$sql = "SELECT * FROM articles WHERE id = $idArticle"; //j'initialise ma commande SQL
-		$article = $db->query($sql); //articles = l'execution de la requete sql
+		$data = $db->query($sql); //articles = l'execution de la requete sql
 		$db = Database::disconnect();
-		$toto = $article->fetch(); 
-		var_dump($toto['id']);
-		return $article->fetch();
+		$articles = $data->fetchAll(PDO::FETCH_CLASS, "Article");
+		if (count($articles) == 1)
+			return $articles[0];
+		else
+			return null;
 	}
 
 	public static function get10MostRecentArticle()
@@ -61,9 +46,11 @@ ArticleRepository::updateArticle($newArticle);
 
 	public static function updateArticle($newArticle)
 	{
-		//modifier sql
 		$db = Database::connect();
-		$sql = "INSERT INTO `articles`(`id`, `title`, `content`, `date`) VALUES (null, '$newArticle['title']', '$newArticle['content']', $newArticle['date']";
+		/*Syntaxe du Update*/
+		$sql = "UPDATE `articles` SET `title`='".$newArticle->getTitle()."',`content`='".$newArticle->getContent().
+		"',`date`='".$newArticle->getDate()."' WHERE id = '".$newArticle->getId()."'";
+		$db->exec($sql);
 		$db = Database::disconnect();
 	}
 

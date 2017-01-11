@@ -4,9 +4,27 @@ require_once('Database.php');
 
 class Article
 {
+	private $id;
 	private $title;
 	private $content;
 	private $date;
+
+	public function getId()
+	{
+		return $this->id;
+	}
+
+	public function setId($id)
+	{
+		$this->id = $id;
+
+		return $this;
+	}
+
+	public function getTitle()
+	{
+		return $this->title;
+	}
 
 	public function setTitle($title)
 	{
@@ -15,11 +33,21 @@ class Article
 		return $this;
 	}
 
+	public function getContent()
+	{
+		return $this->content;
+	}
+
 	public function setContent($content)
 	{
 		$this->content = mysql_real_escape_string($content);
 
 		return $this;
+	}
+
+	public function getDate()
+	{
+		return $this->date;
 	}
 
 	public function setDateToNow()
