@@ -1,20 +1,26 @@
 <?php 
 
-class Blacklist
-{
-		private static $words = ['fuck','porn','problem'];
+	class Blacklist
+	{
+		private $words;
 
-		public static function isValid($text)
+
+		public function __construct($path)
+		{
+			$this->words = explode("\r\n", file_get_contents($path, FILE_USE_INCLUDE_PATH)); //\r\n retour charriot
+		}
+
+		public function isValid($text)
 		{
 			$tableText = explode (' ' , $text);
 			foreach($tableText as $word)
-				foreach(self::$words as $banned)
+				foreach($this->words as $banned)
 					if($word === $banned)
 						return false;
 			return true;
 		}
 
-		public static function replaceStrToStar($string)
+		public function replaceStrToStar($string)
 		{
 			$stars = NULL;
 			for($i = 0; $i < strlen($string); $i++)
@@ -22,18 +28,14 @@ class Blacklist
 			return $stars;
 		}
 
-		public static function cleanText($text)
+		public function cleanText($text)
 		{
 			$tableText = explode (' ' , $text);
 			foreach($tableText as $i => $word)
-				foreach(self::$words as $banned)
+				foreach($this->words as $banned)
 					if($word === $banned)
-							$tableText[$i] = self::replaceStrToStar($banned);
+							$tableText[$i] = $this->replaceStrToStar($banned);
 			return implode(' ', $tableText);
 		} 
-		
-}
-	
-var_dump(Blacklist::isValid('bonjour tout le monde ce texte contient fuck'));
-var_dump(Blacklist::cleanText('bonjour tout le monde ce texte contient problem'));
+	}
  ?>
